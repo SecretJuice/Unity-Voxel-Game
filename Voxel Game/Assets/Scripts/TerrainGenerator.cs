@@ -15,12 +15,20 @@ public class TerrainGenerator : MonoBehaviour
 
     private int generatedSeed = 0;
 
+    int stone = 0, darkstone = 0, autunium = 0;
+
+    FastNoise noise = new FastNoise();
+
     // Start is called before the first frame update
     void Start()
     {
        
 
         generatedSeed = GenerateSeed(randomSeed);
+
+        UnityEngine.Random.InitState(generatedSeed);
+
+        noise.SetSeed(generatedSeed);
 
         GenerateTerrain();
     }
@@ -39,6 +47,8 @@ public class TerrainGenerator : MonoBehaviour
         {
             seedString = (UnityEngine.Random.Range(0, 999999999999) * UnityEngine.Random.Range(0, 999999999999)).ToString();
         }
+
+        
 
         buffer = Encoding.ASCII.GetBytes(seedString);
         buffer = SHA1.Create().ComputeHash(buffer);
@@ -74,6 +84,7 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         print("Generation took: " + Time.realtimeSinceStartup + " seconds");
+        print("Generated " + stone + " Stone, " + darkstone + " Darkstone, " + autunium + "Autunite");
     }
 
     float Perlin3D(float x, float y, float z)
@@ -95,7 +106,7 @@ public class TerrainGenerator : MonoBehaviour
 
     void GenerateChunk(ChunkBlockContainer chunk, Vector3 chunkPos)
     {
-        float noiseScale = 0.01f;
+        float noiseScale = 2f;
 
         int chunkSize = chunk.getChunkSize();
         BlockType[,,] chunkBlocks = chunk.GetChunkBlocks();
@@ -108,12 +119,29 @@ public class TerrainGenerator : MonoBehaviour
                 {
                     Vector3 blockPos = new Vector3(x + chunkPos.x, y + chunkPos.y, z + chunkPos.z);
 
-                    if (Vector3.Distance(blockPos, transform.position) < startingTerrain * 16)
+                    if (Vector3.Distance(blockPos, transform.position) < (startingTerrain) * 16)
                     {
-                        if (FindTerrain(new Vector3(x + chunkPos.x, y + chunkPos.y, z + chunkPos.z)) >= 0.6f)
+                        if (FindTerrain(new Vector3(x + chunkPos.x, y + chunkPos.y, z + chunkPos.z), 5) >= -0.1f)
                         {
                             chunkBlocks[x, y, z] = BlockType.Stone;
+                            stone++;
+
+
+                            if (noise.GetPerlinFractal((x + chunkPos.x + 4000) * noiseScale, (y + chunkPos.y + 4000) * noiseScale, (z + chunkPos.z + 4000) * noiseScale) >= 0.0f)
+                            {
+                                chunkBlocks[x, y, z] = BlockType.DarkStone;
+                                darkstone++;
+                            }
+
+                            if (noise.GetPerlinFractal((x + chunkPos.x + 6000) * (noiseScale), (y + chunkPos.y + 6000) * (noiseScale), (z + chunkPos.z + 6000) * (noiseScale)) >= 0.2f)
+                            {
+                                chunkBlocks[x, y, z] = BlockType.Autunite;
+                                autunium++;
+                            }
+
                         }
+
+                        
                     }
 
                     
@@ -126,13 +154,16 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    float FindTerrain(Vector3 pos)
+    float FindTerrain(Vector3 pos, int octaves)
     {
-        float noise1 = Perlin3D(pos.x * 0.01f, pos.y * 0.01f, pos.z * 0.01f) * 1;
-        float noise2 = Perlin3D(pos.x * 0.03f, pos.y * 0.03f, pos.z * 0.03f) * 0.4f;
-        float noise3 = Perlin3D(pos.x * 0.08f, pos.y * 0.08f, pos.z * 0.08f) * 0.02f;
+        float noiseFloat = 0f;
+
+        for (int i = 0; i < octaves; i++)
+        {
+            noiseFloat += noise.GetPerlinFractal(pos.x * (i + 2), pos.y * (i + 2), pos.z * (i + 2)) * (1 / (i + 1));
+        }
 
 
-        return (noise1 + noise2 + noise3);
+        return noiseFloat;
     }
 }
