@@ -8,16 +8,18 @@ public class TilePos
 
     Vector2[] uvs;
 
+    float offset = 0.001f;
+
     public TilePos(int xPos, int yPos)
     {
         this.xPos = xPos;
         this.yPos = yPos;
         uvs = new Vector2[]
         {
-            new Vector2(xPos/16f, yPos/16f),
-            new Vector2(xPos/16f, (yPos+1)/16f),
-            new Vector2((xPos+1)/16f, (yPos+1)/16f),
-            new Vector2((xPos+1)/16f, yPos/16f),
+            new Vector2(xPos/16f + offset, yPos/16f + offset),
+            new Vector2(xPos/16f + offset, (yPos+1)/16f - offset),
+            new Vector2((xPos+1)/16f - offset, (yPos+1)/16f - offset),
+            new Vector2((xPos+1)/16f - offset, yPos/16f + offset),
         };
     }
 

@@ -13,13 +13,13 @@ public class MeshGenerator : MonoBehaviour
     public BlockType[,,] chunkBlocks;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         chunk = GetComponent<ChunkBlockContainer>();
 
         chunkBlocks = chunk.chunkBlocks;
 
-        BuildMesh();
+        //BuildMesh();
     }
 
     public void BuildMesh()

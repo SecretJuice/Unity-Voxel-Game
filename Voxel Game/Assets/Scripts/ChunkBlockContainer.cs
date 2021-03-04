@@ -30,7 +30,9 @@ public class ChunkBlockContainer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.DrawLine(transform.position, transform.position + Vector3.up * chunkSize, Color.green);
+        Debug.DrawLine(transform.position, transform.position + Vector3.right * chunkSize, Color.red);
+        Debug.DrawLine(transform.position, transform.position + Vector3.forward * chunkSize, Color.blue);
     }
 
 
