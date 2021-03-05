@@ -59,11 +59,11 @@ public class CelestialBodyChunkContainer : MonoBehaviour
     {
         var chunk = Instantiate(chunkPrefab, new Vector3(transform.position.x + newChunkCoordinate.x * 16, transform.position.y + newChunkCoordinate.y * 16, transform.position.z + newChunkCoordinate.z * 16), Quaternion.identity);
         var chunkData = chunk.GetComponent<ChunkBlockContainer>();
+        chunkData.chunkCoordinate = newChunkCoordinate;
+        chunkData.celestialBodyChunkContainer = this;
         chunkData.InitializeEmptyChunk();
 
-        chunkDictionary.Add(newChunkCoordinate, chunkData);
-
-        print(chunkDictionary);
+        AddChunkToDictionary(newChunkCoordinate, chunkData);
 
     }
 }

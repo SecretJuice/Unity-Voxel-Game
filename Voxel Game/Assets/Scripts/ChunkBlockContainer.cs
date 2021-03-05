@@ -160,6 +160,9 @@ public class ChunkBlockContainer : MonoBehaviour
         Debug.DrawLine(transform.position, transform.position + Vector3.up * chunkSize, Color.green);
         Debug.DrawLine(transform.position, transform.position + Vector3.right * chunkSize, Color.red);
         Debug.DrawLine(transform.position, transform.position + Vector3.forward * chunkSize, Color.blue);
+
+        
+
     }
 
 

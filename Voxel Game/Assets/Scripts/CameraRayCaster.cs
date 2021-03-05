@@ -54,9 +54,6 @@ public class CameraRayCaster : MonoBehaviour
                 Vector3 position = hit.point - hit.normal * 0.01f;
                 Vector3 chunkPosition = chunk.transform.position;
 
-                print("Chunk Position: " + chunkPosition);
-                print("Block Pos: " + Mathf.FloorToInt(position.x - chunkPosition.x) + ", " + Mathf.FloorToInt(position.y - chunkPosition.y) + ", " + Mathf.FloorToInt(position.z - chunkPosition.z));
-
                 chunk.SetCell(Mathf.FloorToInt(position.x - chunkPosition.x), Mathf.FloorToInt(position.y - chunkPosition.y), Mathf.FloorToInt(position.z - chunkPosition.z), BlockType.Air);
 
 
@@ -83,9 +80,6 @@ public class CameraRayCaster : MonoBehaviour
                 Vector3 chunkPosition = chunk.transform.position;
 
                 BlockCoordinate blockCoordinate = new BlockCoordinate(Mathf.FloorToInt(position.x - chunkPosition.x), Mathf.FloorToInt(position.y - chunkPosition.y), Mathf.FloorToInt(position.z - chunkPosition.z));
-
-                print("Chunk Position: " + chunkPosition);
-                print("Block Pos: " + Mathf.FloorToInt(position.x - chunkPosition.x) + ", " + Mathf.FloorToInt(position.y - chunkPosition.y) + ", " + Mathf.FloorToInt(position.z - chunkPosition.z));
 
                 chunk.SetNeighbor(blockCoordinate.x, blockCoordinate.y, blockCoordinate.z, hit.normal, heldBlock);
 
