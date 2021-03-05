@@ -38,6 +38,36 @@ public class ChunkBlockContainer : MonoBehaviour
     {
         chunkBlocks[x, y, z] = blockType;
         RebuildMesh();
+
+        if (blockType != BlockType.Air)
+        {
+            return;
+        }
+
+        if (x == 0)
+        {
+            UpdateNeighborChunk(chunkCoordinate, new Vector3Int(-1, 0, 0));
+        }
+        if (x == chunkSize - 1)
+        {
+            UpdateNeighborChunk(chunkCoordinate, new Vector3Int(1, 0, 0));
+        }
+        if (y == 0)
+        {
+            UpdateNeighborChunk(chunkCoordinate, new Vector3Int(0, -1, 0));
+        }
+        if (y == chunkSize - 1)
+        {
+            UpdateNeighborChunk(chunkCoordinate, new Vector3Int(0, 1, 0));
+        }
+        if (z == 0)
+        {
+            UpdateNeighborChunk(chunkCoordinate, new Vector3Int(0, 0, -1));
+        }
+        if (z == chunkSize - 1)
+        {
+            UpdateNeighborChunk(chunkCoordinate, new Vector3Int(0, 0, 1));
+        }
     }
 
     public void RebuildMesh()
@@ -129,6 +159,11 @@ public class ChunkBlockContainer : MonoBehaviour
             SetCell(neighborCoordinate.x, neighborCoordinate.y, neighborCoordinate.z, blockType);
         }
 
+    }
+
+    public void UpdateNeighborChunk(ChunkCoordinate currentChunkCoordinate, Vector3Int facing)
+    {
+        celestialBodyChunkContainer.UpdateChunk(new ChunkCoordinate(currentChunkCoordinate.x + facing.x, currentChunkCoordinate.y + facing.y, currentChunkCoordinate.z + facing.z));
     }
 
     struct VoxelCoordinate

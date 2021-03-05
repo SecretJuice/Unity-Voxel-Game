@@ -55,6 +55,16 @@ public class CelestialBodyChunkContainer : MonoBehaviour
         }
     }
 
+    public void UpdateChunk(ChunkCoordinate updatedChunkCoordinate)
+    {
+        ChunkBlockContainer chunkData;
+
+        if (chunkDictionary.TryGetValue(updatedChunkCoordinate, out chunkData))
+        {
+            chunkData.RebuildMesh();
+        }
+    }
+
     void CreateChunk(ChunkCoordinate newChunkCoordinate)
     {
         var chunk = Instantiate(chunkPrefab, new Vector3(transform.position.x + newChunkCoordinate.x * 16, transform.position.y + newChunkCoordinate.y * 16, transform.position.z + newChunkCoordinate.z * 16), Quaternion.identity);
