@@ -20,12 +20,14 @@ public class TerrainGenerator : MonoBehaviour
     GameObject[] chunks;
     List<MeshGenerator> meshGenerators = new List<MeshGenerator>();
 
+    private CelestialBodyChunkContainer celestialBody;
+
     FastNoise noise = new FastNoise();
 
     // Start is called before the first frame update
     void Awake()
     {
-       
+        celestialBody = GetComponent<CelestialBodyChunkContainer>();
 
         generatedSeed = GenerateSeed(randomSeed);
 
@@ -35,14 +37,14 @@ public class TerrainGenerator : MonoBehaviour
 
         GenerateTerrain();
 
-        chunks = GameObject.FindGameObjectsWithTag("Chunk");
+        //chunks = GameObject.FindGameObjectsWithTag("Chunk");
 
-        foreach(GameObject chunk in chunks)
-        {
-            meshGenerators.Add(chunk.GetComponent<MeshGenerator>());
-        }
+        //foreach(GameObject chunk in chunks)
+        //{
+        //    meshGenerators.Add(chunk.GetComponent<MeshGenerator>());
+        //}
 
-        GenerateMeshes();
+        //GenerateMeshes();
     }
 
 
@@ -84,12 +86,18 @@ public class TerrainGenerator : MonoBehaviour
                 for (int y = -startingTerrain; y < startingTerrain; y++)
                 {
                     
-                    Vector3 chunkPos = new Vector3(x * 16, y * 16, z * 16);
+                    Vector3 chunkPos = new Vector3(transform.position.x + (x * 16), transform.position.y + (y * 16), transform.position.z + (z * 16));
 
                     if (true)//Vector3.Distance(transform.position, chunkPos) <= maxDistance)// && chunkPos.y < 0 && chunkPos.y > (startingTerrain / 2) * -16)
                     {
+                        ChunkCoordinate chunkCoordinate = new ChunkCoordinate(x, y, z);
+
                         var chunk = Instantiate(chunkPrefab, chunkPos, Quaternion.identity);
-                        GenerateChunk(chunk.GetComponent<ChunkBlockContainer>(), chunkPos);
+                        var chunkData = chunk.GetComponent<ChunkBlockContainer>();
+                        chunkData.chunkCoordinate = chunkCoordinate;
+                        chunkData.celestialBodyChunkContainer = celestialBody;
+                        celestialBody.AddChunkToDictionary(chunkCoordinate, chunkData);
+                        GenerateChunk(chunkData, chunkPos);
                     }
 
                     
@@ -125,11 +133,11 @@ public class TerrainGenerator : MonoBehaviour
         int chunkSize = chunk.getChunkSize();
         BlockType[,,] chunkBlocks = chunk.GetChunkBlocks();
 
-        for (int x = 1; x < chunkSize + 1; x++)
+        for (int x = 0; x < chunkSize; x++)
         {
-            for (int z = 1; z < chunkSize + 1; z++)
+            for (int z = 0; z < chunkSize; z++)
             {
-                for (int y = 1; y < chunkSize + 1; y++)
+                for (int y = 0; y < chunkSize; y++)
                 {
                     Vector3 blockPos = new Vector3(x + chunkPos.x, y + chunkPos.y, z + chunkPos.z);
 
