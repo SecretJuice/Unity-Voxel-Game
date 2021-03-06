@@ -391,8 +391,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkPrefab: {fileID: 6572918797484757592, guid: 1519a027e97d79144b1d0ccb11bad006, type: 3}
-  startingTerrain: 1
+  startingTerrain: 4
   randomSeed: 
+  terrainNoiseOctaves: 2
+  surfaceNoiseFrequency: 1
 --- !u!114 &1112240245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -820,7 +822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 268256e807982da4eb2cf78c5ae04a89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heldBlock: 3
+  heldBlock: 2
   interactionRange: 20
 --- !u!1 &2138677391
 GameObject:

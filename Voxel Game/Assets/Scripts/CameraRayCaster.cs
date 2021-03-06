@@ -25,6 +25,13 @@ public class CameraRayCaster : MonoBehaviour
         {
             DoRightClick();
         }
+
+        Vector3 yeet = Quaternion.LookRotation(transform.forward).eulerAngles;
+
+        float surfaceNoiseFrequency = 3f;
+
+        print(-1f * new FastNoise().GetSimplex(Mathf.Cos(yeet.x) * surfaceNoiseFrequency, Mathf.Sin(yeet.y) * surfaceNoiseFrequency, Mathf.Cos(yeet.z) * surfaceNoiseFrequency));
+
     }
 
     RaycastHit CastRayFromCamera()
