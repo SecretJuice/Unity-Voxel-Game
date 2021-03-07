@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class ChunkBlockContainer : MonoBehaviour
+public class Chunk : MonoBehaviour
 {
     const int chunkSize = 16;
 
     public BlockType[,,] chunkBlocks = new BlockType[chunkSize, chunkSize, chunkSize];
 
     public ChunkCoordinate chunkCoordinate = new ChunkCoordinate(0, 0, 0);
-    public CelestialBodyChunkContainer celestialBodyChunkContainer;
+    public ChunkContainer celestialBodyChunkContainer;
 
     private MeshGenerator meshGenerator;
 

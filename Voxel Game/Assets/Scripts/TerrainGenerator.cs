@@ -18,19 +18,13 @@ public class TerrainGenerator : MonoBehaviour
     public int terrainNoiseOctaves = 3;
     public float surfaceNoiseFrequency = 2f;
 
-    int stone = 0, darkstone = 0, autunium = 0;
-
-    GameObject[] chunks;
-    List<MeshGenerator> meshGenerators = new List<MeshGenerator>();
-
-    private CelestialBodyChunkContainer celestialBody;
+    private ChunkContainer _chunkContainer;
 
     FastNoise noise = new FastNoise();
 
-    // Start is called before the first frame update
     void Awake()
     {
-        celestialBody = GetComponent<CelestialBodyChunkContainer>();
+        _chunkContainer = GetComponent<ChunkContainer>();
 
         generatedSeed = GenerateSeed(randomSeed);
 
@@ -39,15 +33,6 @@ public class TerrainGenerator : MonoBehaviour
         noise.SetSeed(generatedSeed);
 
         GenerateTerrain();
-
-        //chunks = GameObject.FindGameObjectsWithTag("Chunk");
-
-        //foreach(GameObject chunk in chunks)
-        //{
-        //    meshGenerators.Add(chunk.GetComponent<MeshGenerator>());
-        //}
-
-        //GenerateMeshes();
     }
 
 
@@ -78,10 +63,6 @@ public class TerrainGenerator : MonoBehaviour
     {
         float startTime = Time.realtimeSinceStartup;
 
-        float maxDistance = Mathf.Sqrt(Mathf.Pow(startingTerrain * 16, 2) * 3);
-
-        print(maxDistance);
-
         for (int x = -startingTerrain; x < startingTerrain; x++)
         {
             for (int z = -startingTerrain; z < startingTerrain; z++)
@@ -89,20 +70,12 @@ public class TerrainGenerator : MonoBehaviour
                 for (int y = -startingTerrain; y < startingTerrain; y++)
                 {
                     
-                    Vector3 chunkPos = new Vector3(transform.position.x + (x * 16), transform.position.y + (y * 16), transform.position.z + (z * 16));
+                    Chunk chunk = _chunkContainer.CreateChunk(new ChunkCoordinate(x, y, z));
 
-                    if (true)//Vector3.Distance(transform.position, chunkPos) <= maxDistance)// && chunkPos.y < 0 && chunkPos.y > (startingTerrain / 2) * -16)
+                    if (chunk != null)
                     {
-                        ChunkCoordinate chunkCoordinate = new ChunkCoordinate(x, y, z);
-
-                        var chunk = Instantiate(chunkPrefab, chunkPos, Quaternion.identity);
-                        var chunkData = chunk.GetComponent<ChunkBlockContainer>();
-                        chunkData.chunkCoordinate = chunkCoordinate;
-                        chunkData.celestialBodyChunkContainer = celestialBody;
-                        celestialBody.AddChunkToDictionary(chunkCoordinate, chunkData);
-                        GenerateChunk(chunkData, chunkPos);
+                        GenerateChunk(chunk);
                     }
-
                     
                 }
             }
@@ -111,9 +84,11 @@ public class TerrainGenerator : MonoBehaviour
         print("Generation took: " + (Time.realtimeSinceStartup - startTime) + " seconds");
     }
 
-    void GenerateChunk(ChunkBlockContainer chunk, Vector3 chunkPos)
+    void GenerateChunk(Chunk chunk)
     {
         float noiseScale = 2f;
+
+        Vector3 chunkPos = chunk.transform.position;
 
         int chunkSize = chunk.getChunkSize();
         BlockType[,,] chunkBlocks = chunk.GetChunkBlocks();
@@ -144,26 +119,19 @@ public class TerrainGenerator : MonoBehaviour
                     if (FindTerrain(new Vector3(x + chunkPos.x, y + chunkPos.y, z + chunkPos.z), terrainNoiseOctaves) >= -0.1f)
                     {
                         chunkBlocks[x, y, z] = BlockType.Stone;
-                        stone++;
 
 
                         if (noise.GetPerlinFractal((x + chunkPos.x + 4000) * noiseScale, (y + chunkPos.y + 4000) * noiseScale, (z + chunkPos.z + 4000) * noiseScale) >= 0.0f)
                         {
                             chunkBlocks[x, y, z] = BlockType.DarkStone;
-                            darkstone++;
                         }
 
                         if (noise.GetPerlinFractal((x + chunkPos.x + 6000) * (noiseScale), (y + chunkPos.y + 6000) * (noiseScale), (z + chunkPos.z + 6000) * (noiseScale)) >= 0.4f)
                         {
                             chunkBlocks[x, y, z] = BlockType.Autunite;
-                            autunium++;
                         }
 
                     }
-
-                        
-                    
-
                 }
             }
         }
@@ -171,50 +139,21 @@ public class TerrainGenerator : MonoBehaviour
 
     float FindTerrain(Vector3 pos, int octaves)
     {
-        float noiseFloat = 0f;
+        //float noiseFloat = 0f;
 
-        for (int i = 0; i < octaves; i++)
-        {
-            noiseFloat += noise.GetPerlinFractal((pos.x - i * 1000) * (i + 2), (pos.y - i * 1000) * (i + 2), (pos.z - i * 1000) * (i + 2)) / (i + 1);
-        }
+        //for (int i = 0; i < octaves; i++)
+        //{
+        //    noiseFloat += noise.GetPerlinFractal((pos.x - i * 1000) * (i + 2), (pos.y - i * 1000) * (i + 2), (pos.z - i * 1000) * (i + 2)) / (i + 1);
+        //}
 
+        //return noiseFloat;
 
-        return noiseFloat;
-    }
+        int defaultOctaves = noise.GetFractalOctaves();
+        noise.SetFractalOctaves(octaves);
 
-    //TEST Get rid of this when done
-    float FindTerrain(Vector3 pos, int octaves, bool printLoop)
-    {
-        float noiseFloat = 0f;
-
-        if (printLoop) print("Finding terrain at " + pos + " with " + octaves + " octaves.");
-        if (printLoop) print("Noise Float initialized at: " + noiseFloat);
-
-        for (int i = 0; i < octaves; i++)
-        {
-            noiseFloat += noise.GetPerlinFractal(pos.x * (i + 2), pos.y * (i + 2), pos.z * (i + 2)) / (i + 1);
-
-
-            if (printLoop) print(noiseFloat);
-
-        }
-
+        float noiseFloat = noise.GetPerlinFractal(pos.x, pos.y, pos.z);
+        noise.SetFractalOctaves(defaultOctaves);
 
         return noiseFloat;
     }
-
-    void GenerateMeshes()
-    {
-        float startTime = Time.realtimeSinceStartup;
-
-        foreach(MeshGenerator chunk in meshGenerators)
-        {
-            chunk.BuildMesh();
-        }
-
-        print("Mesh generation for all generated chunks took: " + (Time.realtimeSinceStartup - startTime) + " seconds.");
-        print("About " + ((Time.realtimeSinceStartup - startTime) / meshGenerators.Count) + " seconds per chunk for " + meshGenerators.Count + "chunks");
-    }
-
-
 }

@@ -2,26 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CelestialBodyChunkContainer : MonoBehaviour
+public class ChunkContainer : MonoBehaviour
 {
 
-    private Dictionary<ChunkCoordinate, ChunkBlockContainer> chunkDictionary = new Dictionary<ChunkCoordinate, ChunkBlockContainer>();
+    private Dictionary<ChunkCoordinate, Chunk> chunkDictionary = new Dictionary<ChunkCoordinate, Chunk>();
 
     public GameObject chunkPrefab;
 
-    public void AddChunkToDictionary(ChunkCoordinate chunkCoordinate, ChunkBlockContainer chunk)
+    public bool AddChunkToDictionary(ChunkCoordinate chunkCoordinate, Chunk chunk)
     {
         if (chunkDictionary.ContainsKey(chunkCoordinate))
         {
-            return;
+            return false;
         }
 
         chunkDictionary.Add(chunkCoordinate, chunk);
+        return true;
     }
 
     public BlockType GetNeigborCellInNeighborChunk(int x, int y, int z, ChunkCoordinate neigborChunkCoordinate)
     {
-        ChunkBlockContainer chunk;
+        Chunk chunk;
 
         if (chunkDictionary.TryGetValue(neigborChunkCoordinate, out chunk))
         {
@@ -35,7 +36,7 @@ public class CelestialBodyChunkContainer : MonoBehaviour
 
     public void SetNeigborCellInNeighborChunk(int x, int y, int z, ChunkCoordinate neigborChunkCoordinate, BlockType blockType)
     {
-        ChunkBlockContainer chunk;
+        Chunk chunk;
 
         if (chunkDictionary.TryGetValue(neigborChunkCoordinate, out chunk))
         {
@@ -43,13 +44,11 @@ public class CelestialBodyChunkContainer : MonoBehaviour
         }
         else
         {
-            CreateChunk(neigborChunkCoordinate);
+            chunk = CreateChunk(neigborChunkCoordinate);
 
-            ChunkBlockContainer newChunk;
-
-            if (chunkDictionary.TryGetValue(neigborChunkCoordinate, out newChunk))
+            if (chunk != null)
             {
-                newChunk.SetCell(x, y, z, blockType);
+                chunk.SetCell(x, y, z, blockType);
             }
 
         }
@@ -57,7 +56,7 @@ public class CelestialBodyChunkContainer : MonoBehaviour
 
     public void UpdateChunk(ChunkCoordinate updatedChunkCoordinate)
     {
-        ChunkBlockContainer chunkData;
+        Chunk chunkData;
 
         if (chunkDictionary.TryGetValue(updatedChunkCoordinate, out chunkData))
         {
@@ -65,15 +64,20 @@ public class CelestialBodyChunkContainer : MonoBehaviour
         }
     }
 
-    void CreateChunk(ChunkCoordinate newChunkCoordinate)
+    public Chunk CreateChunk(ChunkCoordinate newChunkCoordinate)
     {
         var chunk = Instantiate(chunkPrefab, new Vector3(transform.position.x + newChunkCoordinate.x * 16, transform.position.y + newChunkCoordinate.y * 16, transform.position.z + newChunkCoordinate.z * 16), Quaternion.identity);
-        var chunkData = chunk.GetComponent<ChunkBlockContainer>();
+        var chunkData = chunk.GetComponent<Chunk>();
         chunkData.chunkCoordinate = newChunkCoordinate;
         chunkData.celestialBodyChunkContainer = this;
         chunkData.InitializeEmptyChunk();
 
-        AddChunkToDictionary(newChunkCoordinate, chunkData);
+        if (AddChunkToDictionary(newChunkCoordinate, chunkData))
+        {
+            return chunkData;
+        }
+
+        return null;
 
     }
 }

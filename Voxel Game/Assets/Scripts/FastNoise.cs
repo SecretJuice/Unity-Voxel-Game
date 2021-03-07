@@ -107,6 +107,7 @@ public class FastNoise
 	// Sets octave count for all fractal noise types
 	// Default: 3
 	public void SetFractalOctaves(int octaves) { m_octaves = octaves; CalculateFractalBounding(); }
+	public int GetFractalOctaves() { return m_octaves; }
 
 	// Sets octave lacunarity for all fractal noise types
 	// Default: 2.0

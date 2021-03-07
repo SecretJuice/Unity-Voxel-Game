@@ -11,7 +11,6 @@ public class CameraController : MonoBehaviour
     private float xRotation = 0f;
     private float yRotation = 0f;
 
-    // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -23,9 +22,6 @@ public class CameraController : MonoBehaviour
             mouseSensitivity = 400;
     }
 
-    float mx;
-
-    // Update is called once per frame
     void LateUpdate()
     {
 
@@ -33,10 +29,6 @@ public class CameraController : MonoBehaviour
         float mouseX = Mathf.Clamp(Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime, -5, 5);
         float mouseY = Mathf.Clamp(Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime, -5, 5);
 
-        //if (Mathf.Abs(mouseX) > 15 || Mathf.Abs(mouseY) > 15)
-            //return;
-
-        //camera's x rotation (look up and down)
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
@@ -44,12 +36,6 @@ public class CameraController : MonoBehaviour
 
 
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
-        
-
-
-        //player body's y rotation (turn left and right)
-       //playerBody.Rotate(Vector3.up * mouseX);
-
     }
 
     private void FixedUpdate()

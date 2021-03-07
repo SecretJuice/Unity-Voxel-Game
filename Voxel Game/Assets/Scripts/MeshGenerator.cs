@@ -6,7 +6,7 @@ using UnityEngine;
 public class MeshGenerator : MonoBehaviour
 {
 
-    ChunkBlockContainer chunk;
+    Chunk chunk;
 
     const int chunkSize = 16;
 
@@ -17,27 +17,14 @@ public class MeshGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        chunk = GetComponent<ChunkBlockContainer>();
+        chunk = GetComponent<Chunk>();
 
         chunkBlocks = chunk.chunkBlocks;
-
-        //BuildMesh();
-        timer = Random.Range(0.1f, 2f);
     }
 
-    private void Update()
+    private void Start()
     {
-        if (timer < 0f)
-        {
-            return;
-        }
-
-        timer -= Time.deltaTime;
-
-        if (timer < 0f)
-        {
-            BuildMesh();
-        }
+        BuildMesh();
     }
 
     public void BuildMesh()
