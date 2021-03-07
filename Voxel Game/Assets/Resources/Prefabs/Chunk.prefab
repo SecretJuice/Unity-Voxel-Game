@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6572918797484757574}
   - component: {fileID: 6572918797484757575}
   - component: {fileID: 6572918797484757571}
-  - component: {fileID: 6572918797484757570}
+  - component: {fileID: 1088231498340789764}
   m_Layer: 6
   m_Name: Chunk
   m_TagString: Chunk
@@ -108,18 +108,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb0cd2983c19e9a4892b8a208845ce9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  celestialBodyChunkContainer: {fileID: 0}
---- !u!64 &6572918797484757570
-MeshCollider:
+  chunkContainer: {fileID: 0}
+--- !u!114 &1088231498340789764
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6572918797484757592}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c17725302b46cbe4aaf72067d465f398, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -35,8 +35,9 @@ public class TilePos
         {Tile.Stone, new TilePos(0,0)},
         {Tile.DarkStone, new TilePos(0, 1)},
         {Tile.Autunite, new TilePos(0, 2) },
-        
+        {Tile.ShipCore, new TilePos(0, 3) },
+
     };
 }
 
-public enum Tile { Stone, DarkStone, Autunite}
+public enum Tile { Stone, DarkStone, Autunite, ShipCore}

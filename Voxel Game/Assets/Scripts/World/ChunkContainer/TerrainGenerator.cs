@@ -88,7 +88,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         float noiseScale = 2f;
 
-        Vector3 chunkPos = chunk.transform.position;
+        Vector3 chunkPos = chunk.transform.localPosition;
 
         int chunkSize = chunk.getChunkSize();
         BlockType[,,] chunkBlocks = chunk.GetChunkBlocks();
@@ -103,7 +103,7 @@ public class TerrainGenerator : MonoBehaviour
                 {
 
                     Vector3 blockPos = new Vector3(x + chunkPos.x, y + chunkPos.y, z + chunkPos.z);
-                    float distanceFromCenter = Vector3.Distance(blockPos, transform.position);
+                    float distanceFromCenter = Vector3.Distance(blockPos, Vector3.zero);
 
                     Vector3 blockDirection = Quaternion.LookRotation(blockPos - transform.position).eulerAngles;
 
@@ -115,6 +115,9 @@ public class TerrainGenerator : MonoBehaviour
                     {
                         continue;
                     }
+
+                    chunkBlocks[x, y, z] = BlockType.Stone;
+                    continue;
 
                     if (FindTerrain(new Vector3(x + chunkPos.x, y + chunkPos.y, z + chunkPos.z), terrainNoiseOctaves) >= -0.1f)
                     {

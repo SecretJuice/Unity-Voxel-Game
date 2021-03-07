@@ -66,10 +66,15 @@ public class ChunkContainer : MonoBehaviour
 
     public Chunk CreateChunk(ChunkCoordinate newChunkCoordinate)
     {
-        var chunk = Instantiate(chunkPrefab, new Vector3(transform.position.x + newChunkCoordinate.x * 16, transform.position.y + newChunkCoordinate.y * 16, transform.position.z + newChunkCoordinate.z * 16), Quaternion.identity);
+        Vector3 chunkPosition = transform.InverseTransformPoint(new Vector3(transform.position.x + newChunkCoordinate.x * 16, transform.position.y + newChunkCoordinate.y * 16, transform.position.z + newChunkCoordinate.z * 16));
+
+        var chunk = Instantiate(chunkPrefab, transform, false);
+        chunk.transform.localPosition = new Vector3(newChunkCoordinate.x * 16, newChunkCoordinate.y * 16, newChunkCoordinate.z * 16);
+        chunk.transform.localRotation = Quaternion.identity;
+
         var chunkData = chunk.GetComponent<Chunk>();
         chunkData.chunkCoordinate = newChunkCoordinate;
-        chunkData.celestialBodyChunkContainer = this;
+        chunkData.chunkContainer = this;
         chunkData.InitializeEmptyChunk();
 
         if (AddChunkToDictionary(newChunkCoordinate, chunkData))
@@ -78,6 +83,7 @@ public class ChunkContainer : MonoBehaviour
         }
 
         return null;
+        //new Vector3(transform.position.x + newChunkCoordinate.x * 16, transform.position.y + newChunkCoordinate.y * 16, transform.position.z + newChunkCoordinate.z * 16)
 
     }
 }

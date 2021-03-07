@@ -8,10 +8,9 @@ public class PlayerBreakBlockAction : PlayerRayCastAction
 
         if (chunk != null)
         {
-            Vector3 position = hit.point - hit.normal * 0.01f;
-            Vector3 chunkPosition = chunk.transform.position;
+            Vector3 position = chunk.transform.InverseTransformPoint(hit.point - hit.normal * 0.01f);
 
-            chunk.SetCell(Mathf.FloorToInt(position.x - chunkPosition.x), Mathf.FloorToInt(position.y - chunkPosition.y), Mathf.FloorToInt(position.z - chunkPosition.z), BlockType.Air);
+            chunk.SetCell(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y), Mathf.FloorToInt(position.z), BlockType.Air);
         }
     }
 }

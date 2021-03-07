@@ -10,12 +10,12 @@ public class PlayerPlaceBlockAction : PlayerRayCastAction
 
         if (chunk != null)
         {
-            Vector3 position = hit.point - hit.normal * 0.01f;
-            Vector3 chunkPosition = chunk.transform.position;
+            Vector3 position = chunk.transform.InverseTransformPoint(hit.point - hit.normal * 0.01f);
+            //Vector3 chunkPosition = chunk.transform.position;
 
-            BlockCoordinate blockCoordinate = new BlockCoordinate(Mathf.FloorToInt(position.x - chunkPosition.x), Mathf.FloorToInt(position.y - chunkPosition.y), Mathf.FloorToInt(position.z - chunkPosition.z));
+            BlockCoordinate blockCoordinate = new BlockCoordinate(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y), Mathf.FloorToInt(position.z));
 
-            chunk.SetNeighbor(blockCoordinate.x, blockCoordinate.y, blockCoordinate.z, hit.normal, heldBlock);
+            chunk.SetNeighbor(blockCoordinate.x, blockCoordinate.y, blockCoordinate.z, chunk.transform.InverseTransformDirection(hit.normal), heldBlock);
 
         }
     }

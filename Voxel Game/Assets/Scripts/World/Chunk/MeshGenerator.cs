@@ -139,7 +139,7 @@ public class MeshGenerator : MonoBehaviour
         mesh.RecalculateBounds();
 
         GetComponent<MeshFilter>().mesh = mesh;
-        GetComponent<MeshCollider>().sharedMesh = mesh;
+        //GetComponent<MeshCollider>().sharedMesh = mesh;
 
     }
 

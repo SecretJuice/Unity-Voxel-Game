@@ -358,7 +358,7 @@ GameObject:
   - component: {fileID: 1112240244}
   - component: {fileID: 1112240245}
   m_Layer: 0
-  m_Name: CelestialBody
+  m_Name: Astroid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -391,7 +391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chunkPrefab: {fileID: 6572918797484757592, guid: 1519a027e97d79144b1d0ccb11bad006, type: 3}
-  startingTerrain: 2
+  startingTerrain: 1
   randomSeed: 
   terrainNoiseOctaves: 4
   surfaceNoiseFrequency: 1
@@ -404,7 +404,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1112240242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d5261f83a5b43e49b6f6b44a239dcd0, type: 3}
+  m_Script: {fileID: 11500000, guid: 85eded772d3b3a948b320627c234baee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   chunkPrefab: {fileID: 6572918797484757592, guid: 1519a027e97d79144b1d0ccb11bad006, type: 3}
@@ -853,6 +853,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionRange: 8
+--- !u!1 &2060489375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2060489377}
+  - component: {fileID: 2060489376}
+  - component: {fileID: 2060489378}
+  m_Layer: 0
+  m_Name: Ship
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2060489376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060489375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ddb9ba17e855984cbbde74c5f40fdf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chunkPrefab: {fileID: 6572918797484757592, guid: 1519a027e97d79144b1d0ccb11bad006, type: 3}
+--- !u!4 &2060489377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060489375}
+  m_LocalRotation: {x: 0.25000006, y: 0.25000006, z: -0.06698733, w: 0.9330127}
+  m_LocalPosition: {x: 0, y: 0, z: -70}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 30, y: 30, z: 0}
+--- !u!54 &2060489378
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060489375}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0

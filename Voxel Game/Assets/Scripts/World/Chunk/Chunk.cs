@@ -10,13 +10,15 @@ public class Chunk : MonoBehaviour
     public BlockType[,,] chunkBlocks = new BlockType[chunkSize, chunkSize, chunkSize];
 
     public ChunkCoordinate chunkCoordinate = new ChunkCoordinate(0, 0, 0);
-    public ChunkContainer celestialBodyChunkContainer;
+    public ChunkContainer chunkContainer;
 
     private MeshGenerator meshGenerator;
+    private ChunkColliderGenerator _colliderGenerator;
 
     void Awake()
     {
         meshGenerator = GetComponent<MeshGenerator>();
+        _colliderGenerator = GetComponent<ChunkColliderGenerator>();
     }
 
     public BlockType[,,] GetChunkBlocks()
@@ -38,6 +40,7 @@ public class Chunk : MonoBehaviour
     {
         chunkBlocks[x, y, z] = blockType;
         RebuildMesh();
+        EditColliders(x, y, z);
 
         if (blockType != BlockType.Air)
         {
@@ -75,6 +78,11 @@ public class Chunk : MonoBehaviour
         meshGenerator.BuildMesh();
     }
 
+    void EditColliders(int x, int y, int z)
+    {
+        _colliderGenerator.SetCellCollider(x, y, z);
+    }
+
     public void InitializeEmptyChunk()
     {
         for (int x = 0; x < chunkSize; x++)
@@ -96,27 +104,27 @@ public class Chunk : MonoBehaviour
 
         if (neighborCoordinate.x < 0)
         {
-            return celestialBodyChunkContainer.GetNeigborCellInNeighborChunk(chunkSize - 1, y, z, new ChunkCoordinate(chunkCoordinate.x - 1, chunkCoordinate.y, chunkCoordinate.z));
+            return chunkContainer.GetNeigborCellInNeighborChunk(chunkSize - 1, y, z, new ChunkCoordinate(chunkCoordinate.x - 1, chunkCoordinate.y, chunkCoordinate.z));
         }
         if (neighborCoordinate.x >= chunkSize)
         {
-            return celestialBodyChunkContainer.GetNeigborCellInNeighborChunk(0, y, z, new ChunkCoordinate(chunkCoordinate.x + 1, chunkCoordinate.y, chunkCoordinate.z));
+            return chunkContainer.GetNeigborCellInNeighborChunk(0, y, z, new ChunkCoordinate(chunkCoordinate.x + 1, chunkCoordinate.y, chunkCoordinate.z));
         }
         if (neighborCoordinate.y < 0)
         {
-            return celestialBodyChunkContainer.GetNeigborCellInNeighborChunk(x, chunkSize - 1, z, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y - 1, chunkCoordinate.z));
+            return chunkContainer.GetNeigborCellInNeighborChunk(x, chunkSize - 1, z, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y - 1, chunkCoordinate.z));
         }
         if (neighborCoordinate.y >= chunkSize)
         {
-            return celestialBodyChunkContainer.GetNeigborCellInNeighborChunk(x, 0, z, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y + 1, chunkCoordinate.z));
+            return chunkContainer.GetNeigborCellInNeighborChunk(x, 0, z, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y + 1, chunkCoordinate.z));
         }
         if (neighborCoordinate.z < 0)
         {
-            return celestialBodyChunkContainer.GetNeigborCellInNeighborChunk(x, y, chunkSize - 1, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y, chunkCoordinate.z - 1));
+            return chunkContainer.GetNeigborCellInNeighborChunk(x, y, chunkSize - 1, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y, chunkCoordinate.z - 1));
         }
         if (neighborCoordinate.z >= chunkSize)
         {
-            return celestialBodyChunkContainer.GetNeigborCellInNeighborChunk(x, y, 0, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y, chunkCoordinate.z + 1));
+            return chunkContainer.GetNeigborCellInNeighborChunk(x, y, 0, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y, chunkCoordinate.z + 1));
         }
         else
         {
@@ -132,27 +140,27 @@ public class Chunk : MonoBehaviour
 
         if (neighborCoordinate.x < 0)
         {
-            celestialBodyChunkContainer.SetNeigborCellInNeighborChunk(chunkSize - 1, y, z, new ChunkCoordinate(chunkCoordinate.x - 1, chunkCoordinate.y, chunkCoordinate.z), blockType);
+            chunkContainer.SetNeigborCellInNeighborChunk(chunkSize - 1, y, z, new ChunkCoordinate(chunkCoordinate.x - 1, chunkCoordinate.y, chunkCoordinate.z), blockType);
         }
         if (neighborCoordinate.x >= chunkSize)
         {
-            celestialBodyChunkContainer.SetNeigborCellInNeighborChunk(0, y, z, new ChunkCoordinate(chunkCoordinate.x + 1, chunkCoordinate.y, chunkCoordinate.z), blockType);
+            chunkContainer.SetNeigborCellInNeighborChunk(0, y, z, new ChunkCoordinate(chunkCoordinate.x + 1, chunkCoordinate.y, chunkCoordinate.z), blockType);
         }
         if (neighborCoordinate.y < 0)
         {
-            celestialBodyChunkContainer.SetNeigborCellInNeighborChunk(x, chunkSize - 1, z, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y - 1, chunkCoordinate.z), blockType);
+            chunkContainer.SetNeigborCellInNeighborChunk(x, chunkSize - 1, z, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y - 1, chunkCoordinate.z), blockType);
         }
         if (neighborCoordinate.y >= chunkSize)
         {
-            celestialBodyChunkContainer.SetNeigborCellInNeighborChunk(x, 0, z, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y + 1, chunkCoordinate.z), blockType);
+            chunkContainer.SetNeigborCellInNeighborChunk(x, 0, z, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y + 1, chunkCoordinate.z), blockType);
         }
         if (neighborCoordinate.z < 0)
         {
-            celestialBodyChunkContainer.SetNeigborCellInNeighborChunk(x, y, chunkSize - 1, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y, chunkCoordinate.z - 1), blockType);
+            chunkContainer.SetNeigborCellInNeighborChunk(x, y, chunkSize - 1, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y, chunkCoordinate.z - 1), blockType);
         }
         if (neighborCoordinate.z >= chunkSize)
         {
-            celestialBodyChunkContainer.SetNeigborCellInNeighborChunk(x, y, 0, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y, chunkCoordinate.z + 1), blockType);
+            chunkContainer.SetNeigborCellInNeighborChunk(x, y, 0, new ChunkCoordinate(chunkCoordinate.x, chunkCoordinate.y, chunkCoordinate.z + 1), blockType);
         }
         else
         {
@@ -163,7 +171,7 @@ public class Chunk : MonoBehaviour
 
     public void UpdateNeighborChunk(ChunkCoordinate currentChunkCoordinate, Vector3Int facing)
     {
-        celestialBodyChunkContainer.UpdateChunk(new ChunkCoordinate(currentChunkCoordinate.x + facing.x, currentChunkCoordinate.y + facing.y, currentChunkCoordinate.z + facing.z));
+        chunkContainer.UpdateChunk(new ChunkCoordinate(currentChunkCoordinate.x + facing.x, currentChunkCoordinate.y + facing.y, currentChunkCoordinate.z + facing.z));
     }
 
     struct VoxelCoordinate
@@ -192,9 +200,9 @@ public class Chunk : MonoBehaviour
 
     void Update()
     {
-        Debug.DrawLine(transform.position, transform.position + Vector3.up * chunkSize, Color.green);
-        Debug.DrawLine(transform.position, transform.position + Vector3.right * chunkSize, Color.red);
-        Debug.DrawLine(transform.position, transform.position + Vector3.forward * chunkSize, Color.blue);
+        Debug.DrawLine(transform.position, transform.position + transform.up * chunkSize, Color.green);
+        Debug.DrawLine(transform.position, transform.position + transform.right * chunkSize, Color.red);
+        Debug.DrawLine(transform.position, transform.position + transform.forward * chunkSize, Color.blue);
 
         
 
